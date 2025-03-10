@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "386926073225",
+    "firebase_url": "https://zooisen-dc50e-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "zooisen-dc50e",
+    "storage_bucket": "zooisen-dc50e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386926073225:android:6274efc70050808521bd58",
+        "android_client_info": {
+          "package_name": "fr.isen.morelli.zoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbq380U8k3VEYb3lY1TUqbULolZ8mf5tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
