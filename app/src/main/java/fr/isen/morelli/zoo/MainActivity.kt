@@ -25,7 +25,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import fr.isen.morelli.zoo.screens.HomeScreen
+import fr.isen.morelli.zoo.screens.AdminScreen
+import fr.isen.morelli.zoo.screens.FaqScreen
 import fr.isen.morelli.zoo.screens.LoginScreen
+import fr.isen.morelli.zoo.screens.ProfilScreen
+import fr.isen.morelli.zoo.screens.ServicesScreen
 import fr.isen.morelli.zoo.screens.SignUpScreen
 
 
@@ -45,8 +49,21 @@ class MainActivity : ComponentActivity() {
                             SignUpScreen(navController = navController)
                         }
                         composable("home") {
-                            HomeScreen(navController = navController) // À créer
+                            HomeScreen(navController = navController)
                         }
+                        composable("admin_home") {
+                            AdminScreen(navController = navController)
+                        }
+                        composable("services") {
+                            ServicesScreen(navController = navController)
+                        }
+                        composable("profil") {
+                            ProfilScreen(navController = navController)
+                        }
+                        composable("faq") {
+                            FaqScreen(navController = navController)
+                        }
+
                     }
                     //TextButton(onClick = { navController.navigate("signup") }) {
                        // Text("Pas encore de compte ? S'inscrire")

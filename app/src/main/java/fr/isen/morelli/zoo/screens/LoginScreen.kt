@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import fr.isen.morelli.zoo.R
@@ -24,6 +25,7 @@ fun LoginScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     val auth = Firebase.auth
+    val database = FirebaseDatabase.getInstance().reference // Référence vers la Realtime Database
 
     Column(
         modifier = Modifier
@@ -80,7 +82,23 @@ fun LoginScreen(navController: NavController) {
                     auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                navController.navigate("home") // Redirige vers l'écran principal
+                                val userId = auth.currentUser?.uid
+                                userId?.let {
+                                    // Récupérer les données de l'utilisateur depuis la base de données
+                                    database.child("users").child(userId).get()
+                                        .addOnSuccessListener { snapshot ->
+                                            val role = snapshot.child("role").value.toString()
+                                            // Rediriger en fonction du rôle
+                                            if (role == "admin") {
+                                                navController.navigate("admin_home") // Redirection vers la page admin
+                                            } else {
+                                                navController.navigate("home") // Redirection vers la page utilisateur
+                                            }
+                                        }
+                                        .addOnFailureListener {
+                                            errorMessage = "Erreur lors de la récupération du rôle"
+                                        }
+                                }
                             } else {
                                 errorMessage = "Erreur: ${task.exception?.message}"
                             }

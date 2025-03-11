@@ -2,78 +2,84 @@ package fr.isen.morelli.zoo.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 import fr.isen.morelli.zoo.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-    val auth = FirebaseAuth.getInstance()
-    val user = auth.currentUser
+    var selectedItem by remember { mutableStateOf(0) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    // Utilisation de Box pour centrer le titre
-                    Box(
-                        modifier = Modifier.fillMaxWidth(), // Prend toute la largeur disponible
-                        contentAlignment = Alignment.Center // Centre le contenu à l'intérieur du Box
-                    ) {
-                        Text("Accueil : plan du parc")
-                    }
-                }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        // Image en arrière-plan
+        Image(
+            painter = painterResource(id = R.drawable.girafe), // Remplace par ton image
+            contentDescription = "Image de fond",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Texte en haut mais centré en largeur
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp), // Garde la hauteur d’origine
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Bienvenue au Parc animalier de la Barben",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center
             )
-        },
-        content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top, // Le contenu va commencer en haut
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Affichage du message de bienvenue
-                Text(
-                    text = "Bienvenue dans notre zoo, ${user?.email ?: "Utilisateur"}",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                Spacer(modifier = Modifier.height(50.dp)) // Espacement entre le message et l'image
-
-                // Affichage de l'image du zoo
-                Image(
-                    painter = painterResource(id = R.drawable.plan), // Remplacez par le nom de votre image du zoo
-                    contentDescription = "Image du Zoo",
-                    modifier = Modifier
-                        .fillMaxWidth() // Remplir toute la largeur
-                        .height(250.dp) // Ajustez la hauteur de l'image du zoo
-                        .align(Alignment.CenterHorizontally) // Centrer l'image
-                )
-
-                Spacer(modifier = Modifier.height(50.dp)) // Espacement avant le bouton de déconnexion
-
-                // Bouton de déconnexion
-                Button(
-                    onClick = {
-                        auth.signOut()
-                        navController.navigate("login") {
-                            popUpTo("home") { inclusive = true }
-                        }
-                    }
-                ) {
-                    Text("Se déconnecter")
-                }
-            }
         }
-    )
+
+        // Barre de navigation
+        BottomNavigation(
+            backgroundColor = Color.White,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+        ) {
+            BottomNavigationItem(
+                icon = { Icon(painter = painterResource(id = R.drawable.services), contentDescription = "Services", modifier = Modifier.size(30.dp)) },
+                selected = selectedItem == 0,
+                onClick = { selectedItem = 0; navController.navigate("services") }
+            )
+            BottomNavigationItem(
+                icon = { Icon(painter = painterResource(id = R.drawable.animaux), contentDescription = "Animaux", modifier = Modifier.size(30.dp)) },
+                selected = selectedItem == 1,
+                onClick = { selectedItem = 1; navController.navigate("animaux") }
+            )
+            BottomNavigationItem(
+                icon = { Icon(painter = painterResource(id = R.drawable.gps), contentDescription = "GPS", modifier = Modifier.size(30.dp)) },
+                selected = selectedItem == 2,
+                onClick = { selectedItem = 2; navController.navigate("gps") }
+            )
+            BottomNavigationItem(
+                icon = { Icon(painter = painterResource(id = R.drawable.calendrier), contentDescription = "Planning", modifier = Modifier.size(30.dp)) },
+                selected = selectedItem == 3,
+                onClick = { selectedItem = 3; navController.navigate("planning") }
+            )
+            BottomNavigationItem(
+                icon = { Icon(painter = painterResource(id = R.drawable.profil), contentDescription = "Compte", modifier = Modifier.size(30.dp)) },
+                selected = selectedItem == 4,
+                onClick = { selectedItem = 4; navController.navigate("profil") }
+            )
+        }
+    }
 }

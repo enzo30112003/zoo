@@ -17,6 +17,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import androidx.compose.ui.res.painterResource
 import fr.isen.morelli.zoo.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 @Composable
 fun SignUpScreen(navController: NavController) {
@@ -24,7 +26,8 @@ fun SignUpScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-    val auth = Firebase.auth
+    val auth = FirebaseAuth.getInstance()
+    val database = FirebaseDatabase.getInstance().reference // Référence vers la Realtime Database
 
     Column(
         modifier = Modifier
@@ -43,7 +46,7 @@ fun SignUpScreen(navController: NavController) {
         )
 
         // Spacer pour ajuster l'espace sous le logo
-        Spacer(modifier = Modifier.height(50.dp)) // Ajustez cette valeur pour remonter ou descendre le contenu
+        Spacer(modifier = Modifier.height(50.dp))
 
         // Titre de la page
         Text("Créer un compte", style = MaterialTheme.typography.h5)
@@ -93,13 +96,33 @@ fun SignUpScreen(navController: NavController) {
             } else if (password != confirmPassword) {
                 errorMessage = "Les mots de passe ne correspondent pas."
             } else {
-                // Inscription avec Firebase
+                // Inscription avec Firebase Authentication
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            navController.navigate("home") // Rediriger vers l'accueil
+                            val userId = auth.currentUser?.uid
+                            val role = "user"
+
+                            val userData = mapOf(
+                                "email" to email,
+                                "role" to role
+                            )
+
+                            userId?.let {
+                                // Ajout des données dans Firebase Realtime Database
+                                database.child("users").child(it).setValue(userData)
+                                    .addOnSuccessListener {
+                                        // Après l'enregistrement, on redirige vers la page Login
+                                        navController.navigate("login") {
+                                            popUpTo("signup") { inclusive = true }
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                        errorMessage = "Erreur lors de l'enregistrement"
+                                    }
+                            }
                         } else {
-                            errorMessage = "Erreur: ${task.exception?.message}"
+                            errorMessage = "Erreur : ${task.exception?.message}"
                         }
                     }
             }
@@ -121,3 +144,4 @@ fun SignUpScreen(navController: NavController) {
         }
     }
 }
+
