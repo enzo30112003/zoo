@@ -89,7 +89,7 @@ fun RatingBar(currentRating: Int, onRatingChanged: (Int) -> Unit) {
         (1..5).forEach { index ->
             IconButton(onClick = { onRatingChanged(index) }) {
                 Icon(
-                    painter = painterResource(id = if (index <= currentRating) R.drawable.etoile_blanche else R.drawable.etoile_jaune),
+                    painter = painterResource(id = if (index <= currentRating) R.drawable.yellowstar else R.drawable.whitestar),
                     contentDescription = "Note $index"
                 )
             }

@@ -54,18 +54,19 @@ fun AdminScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(30.dp)) // Espacement avant les boutons
 
-                // Boutons supplémentaires
+                // Bouton pour gérer les enclos (avec navigation)
                 Button(
-                    onClick = { /* Action du premier bouton */ },
+                    onClick = { navController.navigate("modifyenclosures") }, // Redirige vers ModifyEnclosuresScreen
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Gérer les animaux")
+                    Text("Gérer les enclos")
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // Bouton pour modifier les horaires
                 Button(
-                    onClick = { /* Action du second bouton */ },
+                    onClick = { /* Action pour modifier les horaires */ },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Modifier les horaires")

@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,17 +24,17 @@ import androidx.compose.foundation.lazy.itemsIndexed
 data class Service(val name: String, val locations: List<String>, val iconRes: Int)
 // 📌 Liste des services avec leurs emplacements et icônes PNG
 val services = listOf(
-    Service("Urgence", listOf("Numéro d'urgence au Parc:             06 31 29 35 98"), R.drawable.urgence),
+    Service("Urgence", listOf("Numéro d'urgence au Parc:             06 31 29 35 98"), R.drawable.emergency),
     Service("Toilettes", listOf("Entrée principale", "le Plateau", "les Clairières (Chien des buissons)"), R.drawable.toilettes),
-    Service("Point d'eau", listOf("le Plateau", "le Plateau (Girafe)", "le Vallon des cascades (Mouflon)", "les Clairières (Lynx)", "les Clairières (Wallaby)"), R.drawable.point_eau),
-    Service("Boutique", listOf("Entrée principale"), R.drawable.boutique),
-    Service("Gare", listOf("Entrée principale (Gare des cascades)", "le Plateau (Gare du plateau)"), R.drawable.gare),
+    Service("Point d'eau", listOf("le Plateau", "le Plateau (Girafe)", "le Vallon des cascades (Mouflon)", "les Clairières (Lynx)", "les Clairières (Wallaby)"), R.drawable.waterpoint),
+    Service("Boutique", listOf("Entrée principale"), R.drawable.shop),
+    Service("Gare", listOf("Entrée principale (Gare des cascades)", "le Plateau (Gare du plateau)"), R.drawable.trainstation),
     Service("Lodge", listOf("le Plateau"), R.drawable.lodge),
     Service("Tente pédagogique", listOf("le Plateau (Zèbre)"), R.drawable.tente),
     Service("Restaurant", listOf("Entrée principale (Restaurant du parc)", "Entrée principale (Petit café)", "le Plateau (Paillote)", "Le Vallon des cascades (Café nomade)"), R.drawable.restaurant),
     Service("Espace de pique-nique", listOf("le Plateau", "le Vallon des cascades"), R.drawable.pique_nique),
-    Service("Plateau de jeux", listOf("le Plateau"), R.drawable.jeux),
-    Service("Point de vue", listOf("le Plateau (Girafe)", "le Belvédère (Rinocéros)", "le Belvédère (Suricate)"), R.drawable.point_vue)
+    Service("Plateau de jeux", listOf("le Plateau"), R.drawable.gamearea),
+    Service("Point de vue", listOf("le Plateau (Girafe)", "le Belvédère (Rhinocéros)", "le Belvédère (Suricate)"), R.drawable.vuepoint)
 )
 val brownColor = Color(0xFF8B4513) // Marron (brun)
 val greenColor = Color(0xFF4CAF50) // Vert

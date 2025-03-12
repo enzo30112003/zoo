@@ -37,7 +37,7 @@ fun ProfilScreen(navController: NavController) {
             ) {
                 // 🔹 Cercle avec l'image de profil
                 Image(
-                    painter = painterResource(id = R.drawable.profilimage), // 🔹 Remplace avec ton image PNG
+                    painter = painterResource(id = R.drawable.profilpicture), // 🔹 Remplace avec ton image PNG
                     contentDescription = "Photo de profil",
                     modifier = Modifier
                         .size(300.dp)

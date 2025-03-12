@@ -29,6 +29,7 @@ import fr.isen.morelli.zoo.screens.AdminScreen
 import fr.isen.morelli.zoo.screens.EnclosuresScreen
 import fr.isen.morelli.zoo.screens.FaqScreen
 import fr.isen.morelli.zoo.screens.LoginScreen
+import fr.isen.morelli.zoo.screens.ModifyEnclosuresScreen
 import fr.isen.morelli.zoo.screens.ProfilScreen
 import fr.isen.morelli.zoo.screens.RateEnclosuresScreen
 import fr.isen.morelli.zoo.screens.ServicesScreen
@@ -70,6 +71,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("rateanimals") {
                             RateEnclosuresScreen(navController = navController)
+                        }
+                        composable("modifyenclosures") {
+                            ModifyEnclosuresScreen(navController = navController)
                         }
 
                     }
