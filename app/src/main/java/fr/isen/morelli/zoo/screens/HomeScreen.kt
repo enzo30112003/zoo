@@ -61,9 +61,9 @@ fun HomeScreen(navController: NavController) {
                 onClick = { selectedItem = 0; navController.navigate("services") }
             )
             BottomNavigationItem(
-                icon = { Icon(painter = painterResource(id = R.drawable.animaux), contentDescription = "Animaux", modifier = Modifier.size(30.dp)) },
+                icon = { Icon(painter = painterResource(id = R.drawable.animaux), contentDescription = "Enclosures", modifier = Modifier.size(30.dp)) },
                 selected = selectedItem == 1,
-                onClick = { selectedItem = 1; navController.navigate("animaux") }
+                onClick = { selectedItem = 1; navController.navigate("enclosures") }
             )
             BottomNavigationItem(
                 icon = { Icon(painter = painterResource(id = R.drawable.gps), contentDescription = "GPS", modifier = Modifier.size(30.dp)) },

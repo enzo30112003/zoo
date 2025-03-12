@@ -26,9 +26,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import fr.isen.morelli.zoo.screens.HomeScreen
 import fr.isen.morelli.zoo.screens.AdminScreen
+import fr.isen.morelli.zoo.screens.EnclosuresScreen
 import fr.isen.morelli.zoo.screens.FaqScreen
 import fr.isen.morelli.zoo.screens.LoginScreen
 import fr.isen.morelli.zoo.screens.ProfilScreen
+import fr.isen.morelli.zoo.screens.RateEnclosuresScreen
 import fr.isen.morelli.zoo.screens.ServicesScreen
 import fr.isen.morelli.zoo.screens.SignUpScreen
 
@@ -62,6 +64,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("faq") {
                             FaqScreen(navController = navController)
+                        }
+                        composable("enclosures") {
+                            EnclosuresScreen(navController = navController)
+                        }
+                        composable("rateanimals") {
+                            RateEnclosuresScreen(navController = navController)
                         }
 
                     }
