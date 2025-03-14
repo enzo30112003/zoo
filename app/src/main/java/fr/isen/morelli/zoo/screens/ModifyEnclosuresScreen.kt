@@ -7,32 +7,42 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.firebase.database.FirebaseDatabase
+import fr.isen.morelli.zoo.R
 import fr.isen.morelli.zoo.model.Enclosure
 import fr.isen.morelli.zoo.repository.FirebaseRepository
-import androidx.compose.ui.res.painterResource
-import fr.isen.morelli.zoo.R
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.Color
 
 @Composable
-fun ModifyEnclosuresScreen(navController: NavController) {
-    val repository = remember { FirebaseRepository() }
+fun ModifyEnclosuresScreen(navController: NavController, repository: FirebaseRepository) {
     val biomes by repository.biomes.collectAsState()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Gérer les Enclos") }) },
+        topBar = {
+            TopAppBar(title = { Text("Gérer les Enclos") })
+        },
         content = { paddingValues ->
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(16.dp)
             ) {
-                biomes.forEach { biome ->
-                    items(biome.enclosures) { enclosure ->
-                        EnclosureManagementItem(enclosure)
+                if (biomes.isEmpty()) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                } else {
+                    LazyColumn {
+                        items(biomes) { biome ->
+                            Text(text = biome.name, fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+                            biome.enclosures.forEach { enclosure ->
+                                EnclosureAdminCard(enclosure) { updatedEnclosure ->
+                                    repository.updateEnclosure(updatedEnclosure)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -41,67 +51,53 @@ fun ModifyEnclosuresScreen(navController: NavController) {
 }
 
 @Composable
-fun EnclosureManagementItem(enclosure: Enclosure) {
-    var isOpen by remember { mutableStateOf(true) }
-    var inMaintenance by remember { mutableStateOf(false) }
-
+fun EnclosureAdminCard(enclosure: Enclosure, onStatusChange: (Enclosure) -> Unit) {
     Card(
+        backgroundColor = Color.LightGray,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 4.dp
+            .padding(8.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Enclos: ${enclosure.id}", style = MaterialTheme.typography.h6)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Statut: ${if (isOpen) "Ouvert" else "Fermé"}")
-                Icon(
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = enclosure.id, fontSize = 20.sp, modifier = Modifier.weight(1f))
+                Image(
                     painter = painterResource(
-                        id = if (isOpen) R.drawable.open else R.drawable.close
+                        id = getEnclosureStatusIcon(enclosure.isopen, enclosure.inmaintenance)
                     ),
-                    contentDescription = null,
-                    tint = if (isOpen) Color.Green else Color.Red,
+                    contentDescription = "Statut enclos",
                     modifier = Modifier.size(24.dp)
                 )
-                Switch(checked = isOpen, onCheckedChange = { newValue ->
-                    isOpen = newValue
-                    updateEnclosureStatus(enclosure.id, "isOpen", newValue)
-                })
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Maintenance: ${if (inMaintenance) "Activée" else "Désactivée"}")
-                Icon(
-                    painter = painterResource(
-                        id = if (inMaintenance) R.drawable.maintenance else R.drawable.nomaintenance
-                    ),
-                    contentDescription = null,
-                    tint = if (inMaintenance) Color.Yellow else Color.Gray,
-                    modifier = Modifier.size(24.dp)
-                )
-                Switch(checked = inMaintenance, onCheckedChange = { newValue ->
-                    inMaintenance = newValue
-                    updateEnclosureStatus(enclosure.id, "inMaintenance", newValue)
-                })
+            Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = {
+                        onStatusChange(enclosure.copy(isopen = !enclosure.isopen))
+                    }
+                ) {
+                    Text(if (enclosure.isopen) "Fermer" else "Ouvrir")
+                }
+
+                Button(
+                    onClick = {
+                        onStatusChange(enclosure.copy(inmaintenance = !enclosure.inmaintenance))
+                    }
+                ) {
+                    Text(if (enclosure.inmaintenance) "Fin Maintenance" else "Mettre en maintenance")
+                }
             }
         }
     }
 }
 
-fun updateEnclosureStatus(enclosureId: String, field: String, value: Boolean) {
-    val database = FirebaseDatabase.getInstance().getReference("enclosures/$enclosureId/$field")
-    database.setValue(value)
+@Composable
+fun getEnclosureStatusIcon(isopen: Boolean, inmaintenance: Boolean): Int {
+    return when {
+        !isopen -> R.drawable.close // 🚫 Fermé
+        inmaintenance -> R.drawable.maintenance // 🛠️ En maintenance
+        else -> R.drawable.open // ✅ Ouvert
+    }
 }
