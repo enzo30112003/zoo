@@ -48,15 +48,15 @@ class MainActivity : ComponentActivity() {
                             FaqScreen(navController = navController)
                         }
                         composable("enclosures") {
-                            EnclosuresScreen(navController = navController)
+                            EnclosuresScreen(navController = navController, repository = repository)
                         }
                         composable("rateanimals") {
                             RateEnclosuresScreen(navController = navController)
                         }
                         composable("modifyenclosures") {
-                            // Passez repository à ModifyEnclosuresScreen
                             ModifyEnclosuresScreen(navController = navController, repository = repository)
                         }
+
                     }
                 }
             }

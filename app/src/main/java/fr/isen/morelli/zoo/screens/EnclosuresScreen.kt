@@ -20,8 +20,7 @@ import fr.isen.morelli.zoo.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnclosuresScreen(navController: NavController) {
-    val repository = remember { FirebaseRepository() }
+fun EnclosuresScreen(navController: NavController, repository: FirebaseRepository) {
     val biomes by repository.biomes.collectAsState()
     val enclosuresStatus by repository.enclosuresStatus.collectAsState()
 
@@ -35,8 +34,9 @@ fun EnclosuresScreen(navController: NavController) {
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
+                // 🔹 Bouton pour noter les enclos préférés
                 Button(
-                    onClick = { navController.navigate("rateenclosures") },
+                    onClick = { navController.navigate("rateanimals") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -60,11 +60,18 @@ fun EnclosuresScreen(navController: NavController) {
 
 @Composable
 fun BiomeCard(biome: Biome, enclosuresStatus: Map<String, Pair<Boolean, Boolean>>) {
+    val biomeColor = try {
+        Color(android.graphics.Color.parseColor(biome.color)) // Convertir HEX en couleur
+    } catch (e: Exception) {
+        Color.Gray // Sécurité en cas de couleur invalide
+    }
+
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biome.color))),
+        colors = CardDefaults.cardColors(containerColor = biomeColor),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = biome.name, fontSize = 20.sp, color = Color.White)
@@ -77,27 +84,39 @@ fun BiomeCard(biome: Biome, enclosuresStatus: Map<String, Pair<Boolean, Boolean>
 
 @Composable
 fun EnclosureCard(enclosure: Enclosure, enclosuresStatus: Map<String, Pair<Boolean, Boolean>>) {
-    val isopen = enclosure.isopen
-    val inmaintenance = enclosure.inmaintenance
+    val uniqueKey = "${enclosure.id_biomes}_${enclosure.id}"
+    val status = enclosuresStatus[uniqueKey]
+    val isopen = status?.first ?: true
+    val inmaintenance = status?.second ?: false
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = if (!isopen) Color.Red else if (inmaintenance) Color.Yellow else Color.LightGray),
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray), // Fond gris pour l'enclos
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = enclosure.id, fontSize = 18.sp)
+
                 Spacer(modifier = Modifier.width(8.dp))
-                if (!isopen) {
-                    Image(painter = painterResource(R.drawable.close), contentDescription = "Fermé")
-                } else if (inmaintenance) {
-                    Image(painter = painterResource(R.drawable.maintenance), contentDescription = "En Maintenance")
+
+                val iconRes = when {
+                    !isopen -> R.drawable.close
+                    inmaintenance -> R.drawable.maintenance
+                    else -> R.drawable.open
                 }
+
+                Image(
+                    painter = painterResource(id = iconRes),
+                    contentDescription = "Statut de l'enclos",
+                    modifier = Modifier.size(24.dp)
+                )
             }
+
             enclosure.animals.forEach { animal ->
-                Text(text = "- ${animal.name}", fontSize = 16.sp, color = Color.DarkGray)
+                Text(text = "- ${animal.name}", fontSize = 16.sp)
             }
         }
     }

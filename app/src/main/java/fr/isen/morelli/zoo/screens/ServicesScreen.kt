@@ -6,25 +6,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import fr.isen.morelli.zoo.R
-import androidx.compose.material3.CardDefaults
-import androidx.compose.foundation.lazy.itemsIndexed
-
 
 data class Service(val name: String, val locations: List<String>, val iconRes: Int)
-// 📌 Liste des services avec leurs emplacements et icônes PNG
+
 val services = listOf(
-    Service("Urgence", listOf("Numéro d'urgence au Parc:             06 31 29 35 98"), R.drawable.emergency),
+    Service("Urgence", listOf("Numéro d'urgence au Parc:                06 31 29 35 98"), R.drawable.emergency),
     Service("Toilettes", listOf("Entrée principale", "le Plateau", "les Clairières (Chien des buissons)"), R.drawable.toilettes),
     Service("Point d'eau", listOf("le Plateau", "le Plateau (Girafe)", "le Vallon des cascades (Mouflon)", "les Clairières (Lynx)", "les Clairières (Wallaby)"), R.drawable.waterpoint),
     Service("Boutique", listOf("Entrée principale"), R.drawable.shop),
@@ -36,7 +36,8 @@ val services = listOf(
     Service("Plateau de jeux", listOf("le Plateau"), R.drawable.gamearea),
     Service("Point de vue", listOf("le Plateau (Girafe)", "le Belvédère (Rhinocéros)", "le Belvédère (Suricate)"), R.drawable.vuepoint)
 )
-val brownColor = Color(0xFF8B4513) // Marron (brun)
+
+val brownColor = Color(0xFF8B4513) // Marron
 val greenColor = Color(0xFF4CAF50) // Vert
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +48,7 @@ fun ServicesScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Services du Zoo", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold) }
+                title = { Text("Services du Zoo", fontWeight = FontWeight.Bold) }
             )
         }
     ) { padding ->
@@ -76,7 +77,6 @@ fun ServicesScreen(navController: NavController) {
     }
 }
 
-// 📌 Élément de liste amélioré avec icônes PNG et couleurs alternées
 @Composable
 fun ServiceItem(
     serviceName: String,
@@ -86,13 +86,15 @@ fun ServiceItem(
     onClick: () -> Unit,
     backgroundColor: Color
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .shadow(8.dp, shape = MaterialTheme.shapes.medium)
             .clickable(onClick = onClick)
-            .animateContentSize(), // Animation fluide de l'expansion
+            .animateContentSize(),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
@@ -110,19 +112,28 @@ fun ServiceItem(
                 Text(
                     text = serviceName,
                     fontSize = 18.sp,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                    color = Color.White // Texte en blanc pour contraste
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 locations.forEach { location ->
+                    val isPhoneNumber = location.trim().matches(Regex(".*\\d{2} \\d{2} \\d{2} \\d{2} \\d{2}.*"))
+
                     Text(
                         text = "• $location",
                         fontSize = 16.sp,
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
-                        color = Color.White,
-                        modifier = Modifier.padding(start = 32.dp, top = 4.dp)
+                        fontWeight = FontWeight.Medium,
+                        color = if (isPhoneNumber) Color.Yellow else Color.White,
+                        modifier = Modifier
+                            .padding(start = 32.dp, top = 4.dp)
+                            .clickable(enabled = isPhoneNumber) {
+                                if (isPhoneNumber) {
+                                    val phoneNumber = location.filter { it.isDigit() }
+                                    uriHandler.openUri("tel:$phoneNumber")
+                                }
+                            }
                     )
                 }
             }

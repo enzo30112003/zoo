@@ -58,10 +58,11 @@ class FirebaseRepository {
                 }
                 _biomes.value = biomeList
 
-                // Mise à jour de enclosuresStatus
+                // Mise à jour de enclosuresStatus avec une clé unique "biomeId_enclosureId"
                 val statusMap = biomeList.flatMap { biome ->
                     biome.enclosures.map { enclosure ->
-                        enclosure.id to Pair(enclosure.isopen, enclosure.inmaintenance)
+                        val uniqueKey = "${biome.id}_${enclosure.id}"
+                        uniqueKey to Pair(enclosure.isopen, enclosure.inmaintenance)
                     }
                 }.toMap()
                 _enclosuresStatus.value = statusMap
