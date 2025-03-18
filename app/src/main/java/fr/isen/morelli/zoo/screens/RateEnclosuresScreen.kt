@@ -30,7 +30,6 @@ fun RateEnclosuresScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = { Text("Noter un Enclos") },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
 
         },

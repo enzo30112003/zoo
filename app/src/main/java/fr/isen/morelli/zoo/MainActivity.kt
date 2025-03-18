@@ -56,6 +56,12 @@ class MainActivity : ComponentActivity() {
                         composable("modifyenclosures") {
                             ModifyEnclosuresScreen(navController = navController, repository = repository)
                         }
+                        composable("admin_feeding") {
+                            AdminFeedingScheduleScreen(navController = navController, repository = repository)
+                        } // 🔹 Nouvel écran
+                        composable("user_feeding") {
+                            UserFeedingScheduleScreen(navController = navController, repository = repository)
+                        }
 
                     }
                 }

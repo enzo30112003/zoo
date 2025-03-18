@@ -11,6 +11,7 @@ data class Enclosure(
     val id: String = "",
     val id_biomes: String = "",
     val meal: String = "",
+    val meal_time: String = "",
     val isopen: Boolean = true, // ✅ Ajout de isOpen
     val inmaintenance: Boolean = false, // 🛠️ Ajout de inMaintenance
     val animals: List<Animal> = emptyList()

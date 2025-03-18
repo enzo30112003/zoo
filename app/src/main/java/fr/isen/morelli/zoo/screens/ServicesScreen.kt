@@ -37,8 +37,8 @@ val services = listOf(
     Service("Point de vue", listOf("le Plateau (Girafe)", "le Belvédère (Rhinocéros)", "le Belvédère (Suricate)"), R.drawable.vuepoint)
 )
 
-val brownColor = Color(0xFF8B4513) // Marron
-val greenColor = Color(0xFF4CAF50) // Vert
+val brownColor = Color(0xFF9B5D5D) // Marron
+val greenColor = Color(0xFFC0EA9E) // Vert
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

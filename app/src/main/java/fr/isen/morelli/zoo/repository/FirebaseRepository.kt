@@ -41,6 +41,7 @@ class FirebaseRepository {
                                 id = enclosureId,
                                 id_biomes = biomeId,
                                 meal = enclosureSnapshot.child("meal").getValue(String::class.java) ?: "",
+                                meal_time = enclosureSnapshot.child("meal_time").getValue(String::class.java) ?: "", // 🔹 Ajout de meal_time
                                 isopen = enclosureSnapshot.child("isopen").getValue(Boolean::class.java) ?: true,
                                 inmaintenance = enclosureSnapshot.child("inmaintenance").getValue(Boolean::class.java) ?: false,
                                 animals = enclosureSnapshot.child("animals").children.mapNotNull { animalSnapshot ->
@@ -80,8 +81,13 @@ class FirebaseRepository {
             .child("enclosures")
             .child(enclosure.id)
 
-        enclosureRef.child("isopen").setValue(enclosure.isopen)
-        enclosureRef.child("inmaintenance").setValue(enclosure.inmaintenance)
+        val updates = mapOf(
+            "meal" to enclosure.meal,
+            "meal_time" to enclosure.meal_time, // 🔹 Ajout de meal_time
+            "isopen" to enclosure.isopen,
+            "inmaintenance" to enclosure.inmaintenance
+        )
+        enclosureRef.updateChildren(updates)
             .addOnSuccessListener {
                 Log.d("Firebase", "Enclos ${enclosure.id} mis à jour avec succès")
             }
