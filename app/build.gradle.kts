@@ -74,6 +74,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-compose:2.7.7")
     implementation ("androidx.compose.material3:material3:1.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0") // Google Maps
+    implementation("com.google.maps.android:maps-compose:2.11.4")      // Maps Compose
+    implementation("com.google.android.gms:play-services-location:21.0.1") // Location Services
 
 
 }

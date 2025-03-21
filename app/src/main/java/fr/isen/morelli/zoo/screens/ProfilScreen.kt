@@ -24,7 +24,7 @@ fun ProfilScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Mon Profil",textAlign = TextAlign.Center) })
+            TopAppBar(title = { Text("Mon Profil", textAlign = TextAlign.Center) })
         },
         content = { paddingValues ->
             Column(
@@ -32,12 +32,11 @@ fun ProfilScreen(navController: NavController) {
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(16.dp),
-                verticalArrangement = Arrangement.SpaceBetween, // 🔹 Place les éléments correctement
+                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 🔹 Cercle avec l'image de profil
                 Image(
-                    painter = painterResource(id = R.drawable.profilpicture), // 🔹 Remplace avec ton image PNG
+                    painter = painterResource(id = R.drawable.profilpicture),
                     contentDescription = "Photo de profil",
                     modifier = Modifier
                         .size(300.dp)
@@ -47,16 +46,24 @@ fun ProfilScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // 🔹 Bouton FAQ
-                Button(
-                    onClick = { navController.navigate("faq") }
-                ) {
+                // Bouton FAQ
+                Button(onClick = { navController.navigate("faq") }) {
                     Text("FAQ")
                 }
 
-                Spacer(modifier = Modifier.weight(1f)) // 🔹 Pousse le bouton "Se déconnecter" vers le bas
+                Spacer(modifier = Modifier.height(16.dp))
 
-                // 🔹 Bouton Se Déconnecter
+                // Bouton pour voir les avis et commentaires
+                Button(onClick = {
+                    // Naviguer vers l'écran des avis et commentaires
+                    navController.navigate("enclosure_ratings")
+                }) {
+                    Text("Voir les Avis et Commentaires")
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Bouton Se Déconnecter
                 Button(
                     onClick = {
                         auth.signOut()

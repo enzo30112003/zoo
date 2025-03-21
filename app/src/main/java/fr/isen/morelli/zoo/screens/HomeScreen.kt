@@ -1,5 +1,10 @@
 package fr.isen.morelli.zoo.screens
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,17 +13,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import fr.isen.morelli.zoo.R
 
 @Composable
 fun HomeScreen(navController: NavController) {
     var selectedItem by remember { mutableStateOf(0) }
+    val context = LocalContext.current
+
+    // État pour vérifier si la permission est accordée
+    val permissionGranted = remember { mutableStateOf(checkLocationPermission(context)) }
+
+    // Lanceur pour demander les permissions
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        permissionGranted.value = isGranted
+        if (isGranted) {
+            navController.navigate("gps") // Redirige vers l'écran GPS si la permission est accordée
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -68,7 +89,15 @@ fun HomeScreen(navController: NavController) {
             BottomNavigationItem(
                 icon = { Icon(painter = painterResource(id = R.drawable.gps), contentDescription = "GPS", modifier = Modifier.size(30.dp)) },
                 selected = selectedItem == 2,
-                onClick = { selectedItem = 2; navController.navigate("gps") }
+                onClick = {
+                    selectedItem = 2
+                    if (permissionGranted.value) {
+                        navController.navigate("gps")
+                    } else {
+                        // Demander la permission
+                        locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                    }
+                }
             )
             BottomNavigationItem(
                 icon = { Icon(painter = painterResource(id = R.drawable.planning), contentDescription = "Planning", modifier = Modifier.size(30.dp)) },
@@ -82,4 +111,12 @@ fun HomeScreen(navController: NavController) {
             )
         }
     }
+}
+
+// Fonction pour vérifier si la permission est accordée
+fun checkLocationPermission(context: Context): Boolean {
+    return ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
 }

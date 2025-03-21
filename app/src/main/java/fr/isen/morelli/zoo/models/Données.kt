@@ -23,3 +23,16 @@ data class Biome(
     val color: String = "#FFFFFF",
     val enclosures: List<Enclosure> = emptyList()
 )
+
+data class GPSPoint(
+    val name: String, // Nom de l'animal ou du point d'intérêt
+    val lat: String,  // Latitude
+    val lon: String, // Longitude
+    val color: String
+)
+
+data class Rating(
+    val enclosureId: String = "",
+    val rating: Int = 0,
+    val comment: String = ""
+)

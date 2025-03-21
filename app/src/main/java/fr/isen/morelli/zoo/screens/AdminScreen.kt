@@ -66,7 +66,7 @@ fun AdminScreen(navController: NavController) {
 
                 // Bouton pour modifier les horaires
                 Button(
-                    onClick = {  navController.navigate("modifyenclosures") },
+                    onClick = {  navController.navigate("admin_feeding") },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Modifier les horaires")
