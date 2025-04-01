@@ -15,6 +15,8 @@ import androidx.navigation.NavController
 import fr.isen.morelli.zoo.model.GPSPoint
 import fr.isen.morelli.zoo.repository.FirebaseRepository
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +26,12 @@ fun GPSScreen(navController: NavController, repository: FirebaseRepository) {
     // Afficher un indicateur de chargement tant que les points GPS ne sont pas disponibles
     if (gpsPoints.isEmpty()) {
         Scaffold(
-            topBar = { TopAppBar(title = { Text("Sélectionnez votre destination") }) }
+            topBar = { TopAppBar(title = { Text("Sélectionnez votre destination") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
+                    }
+                }) }
         ) { padding ->
             Column(
                 modifier = Modifier

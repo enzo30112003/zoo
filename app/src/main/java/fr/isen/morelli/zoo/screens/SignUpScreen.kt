@@ -8,17 +8,18 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import androidx.compose.ui.res.painterResource
 import fr.isen.morelli.zoo.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import androidx.compose.foundation.shape.RoundedCornerShape
+
+
 
 @Composable
 fun SignUpScreen(navController: NavController) {
@@ -32,7 +33,9 @@ fun SignUpScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize() // Remplir toute la taille de l'écran
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally, // Centrer les éléments horizontalement
+        verticalArrangement = Arrangement.Top // Organiser les éléments du haut vers le bas
     ) {
         // Afficher l'image du logo en haut
         Spacer(modifier = Modifier.height(50.dp))
@@ -59,7 +62,14 @@ fun SignUpScreen(navController: NavController) {
             onValueChange = { email = it },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = (Color(0xFF914D2E)),
+                unfocusedBorderColor = (Color(0xFF000000)),
+                cursorColor = (Color(0xFF914D2E)),
+                focusedLabelColor = (Color(0xFF914D2E)),
+                unfocusedLabelColor = (Color(0xFF000000))
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -70,7 +80,14 @@ fun SignUpScreen(navController: NavController) {
             label = { Text("Mot de passe") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = (Color(0xFF914D2E)),
+                unfocusedBorderColor = (Color(0xFF000000)),
+                cursorColor = (Color(0xFF914D2E)),
+                focusedLabelColor = (Color(0xFF914D2E)),
+                unfocusedLabelColor = (Color(0xFF000000))
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -81,7 +98,15 @@ fun SignUpScreen(navController: NavController) {
             label = { Text("Confirmez le mot de passe") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = (Color(0xFF914D2E)),
+                unfocusedBorderColor = (Color(0xFF000000)),
+                cursorColor = (Color(0xFF914D2E)),
+                focusedLabelColor = (Color(0xFF914D2E)),
+                unfocusedLabelColor = (Color(0xFF000000))
+            )
+
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +151,10 @@ fun SignUpScreen(navController: NavController) {
                         }
                     }
             }
-        }) {
+        },colors = ButtonDefaults.buttonColors(
+            backgroundColor = (Color(0xFF914D2E)),
+            contentColor = Color.White
+        ),shape = RoundedCornerShape(50.dp)) {
             Text("S'inscrire")
         }
 
@@ -139,9 +167,13 @@ fun SignUpScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Lien vers l'écran de connexion
-        TextButton(onClick = { navController.navigate("login") }) {
+        TextButton(onClick = { navController.navigate("login") },
+            colors = ButtonDefaults.textButtonColors(
+                contentColor = (Color(0xFF914D2E))
+            )) {
             Text("Déjà un compte ? Se connecter")
         }
     }
 }
+
 

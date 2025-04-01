@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,7 +28,12 @@ fun EnclosuresScreen(navController: NavController, repository: FirebaseRepositor
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Liste des Biomes, Enclos et Animaux") })
+            TopAppBar(title = { Text("Liste des Biomes, Enclos et Animaux") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
+                    }
+                })
         },
         content = { paddingValues ->
             Column(

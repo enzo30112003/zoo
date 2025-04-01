@@ -15,6 +15,8 @@ import fr.isen.morelli.zoo.R
 import fr.isen.morelli.zoo.model.Enclosure
 import fr.isen.morelli.zoo.repository.FirebaseRepository
 import androidx.compose.foundation.Image
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.graphics.Color
 
 @Composable
@@ -23,7 +25,16 @@ fun ModifyEnclosuresScreen(navController: NavController, repository: FirebaseRep
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Gérer les Enclos") })
+            TopAppBar(
+                title = { Text("Gérer les Enclos") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
+                    }
+                },
+                backgroundColor = Color.White, // ✅ Suppression de la couleur violette
+                contentColor = Color.Black // Texte et icône en noir pour lisibilité
+            )
         },
         content = { paddingValues ->
             Column(
@@ -53,7 +64,7 @@ fun ModifyEnclosuresScreen(navController: NavController, repository: FirebaseRep
 @Composable
 fun EnclosureAdminCard(enclosure: Enclosure, onStatusChange: (Enclosure) -> Unit) {
     Card(
-        backgroundColor = Color.LightGray,
+        backgroundColor = Color(0xFFF5DED6),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
@@ -76,17 +87,19 @@ fun EnclosureAdminCard(enclosure: Enclosure, onStatusChange: (Enclosure) -> Unit
                 Button(
                     onClick = {
                         onStatusChange(enclosure.copy(isopen = !enclosure.isopen))
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8B4513)) // ✅ Marron
                 ) {
-                    Text(if (enclosure.isopen) "Fermer" else "Ouvrir")
+                    Text(if (enclosure.isopen) "Fermer" else "Ouvrir", color = Color.White)
                 }
 
                 Button(
                     onClick = {
                         onStatusChange(enclosure.copy(inmaintenance = !enclosure.inmaintenance))
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8B4513)) // ✅ Marron
                 ) {
-                    Text(if (enclosure.inmaintenance) "Fin Maintenance" else "Mettre en maintenance")
+                    Text(if (enclosure.inmaintenance) "Fin Maintenance" else "Mettre en maintenance", color = Color.White)
                 }
             }
         }

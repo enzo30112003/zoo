@@ -20,6 +20,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -56,6 +58,11 @@ fun UserFeedingScheduleScreen(navController: NavController, repository: Firebase
         topBar = {
             TopAppBar(
                 title = { Text("Planning du jour : nourrissage", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
+                    }
+                }
 
             )
         },

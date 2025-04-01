@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,7 +26,12 @@ fun ProfilScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Mon Profil", textAlign = TextAlign.Center) })
+            TopAppBar(title = { Text("Mon Profil", textAlign = TextAlign.Center) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Retour")
+                    }
+                })
         },
         content = { paddingValues ->
             Column(
